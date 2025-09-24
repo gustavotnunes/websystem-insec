@@ -1,0 +1,165 @@
+:root {
+    --background-color: #12121e;
+    --primary-text: #e0e0e0;
+    --secondary-text: #a0a0a0;
+    --accent-color: #5d5fef;
+    --card-background: #1e1e2d;
+    --border-color: #33334d;
+    --risk-high: #ff5555;
+    --risk-medium: #ffaa55;
+    --risk-low: #55aaff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto Mono', monospace;
+    background-color: var(--background-color);
+    color: var(--primary-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+main {
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.main-logo {
+    max-width: 250px; /* Ajuste o tamanho conforme preferir */
+    height: auto;
+    margin-bottom: 20px; /* Espaçamento entre a logo e o parágrafo */
+}
+
+header p {
+    font-size: 1.1rem;
+    color: var(--secondary-text);
+    margin-bottom: 40px;
+}
+
+.search-container {
+    display: flex;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#urlInput {
+    flex-grow: 1;
+    border: none;
+    padding: 20px;
+    font-size: 1rem;
+    background-color: var(--card-background);
+    color: var(--primary-text);
+    outline: none;
+}
+
+#verifyButton {
+    border: none;
+    padding: 0 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    background-color: var(--accent-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#verifyButton:hover {
+    background-color: #4a4cc7;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#results {
+    margin-top: 40px;
+    text-align: left;
+}
+
+/* Animação de Loading */
+#loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-left-color: var(--accent-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Estilos do Relatório */
+.report-card {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.report-card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-text);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.report-card h3 .status-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.report-card p {
+    color: var(--secondary-text);
+    line-height: 1.6;
+}
+
+.report-card ul {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.report-card li {
+    background-color: rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.risk-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 10px;
+    color: white;
+}
+
+.risk-high { background-color: var(--risk-high); }
+.risk-medium { background-color: var(--risk-medium); }
+.risk-low { background-color: var(--risk-low); }

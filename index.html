@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InSec - Verificador de Segurança</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <header>
+            <img src="insec_logo_transparent.png" alt="InSec Logo" class="main-logo">
+            <p>Análise de segurança para seu site</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="urlInput" placeholder="Digite a URL do site (ex: seudominio.com)">
+            <button id="verifyButton">Verificar</button>
+        </div>
+
+        <div id="results" class="hidden">
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Analisando... Isso pode levar alguns segundos.</p>
+            </div>
+            <div id="report" class="hidden">
+                </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
