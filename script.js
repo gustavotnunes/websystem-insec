@@ -1,11 +1,12 @@
+// script.js (Modificado)
 document.addEventListener('DOMContentLoaded', () => {
+    // ... (mesmas variáveis do seu arquivo original)
     const urlInput = document.getElementById('urlInput');
     const verifyButton = document.getElementById('verifyButton');
     const resultsDiv = document.getElementById('results');
     const loadingDiv = document.getElementById('loading');
     const reportDiv = document.getElementById('report');
 
-    // Inicia a verificação ao clicar no botão ou apertar Enter
     verifyButton.addEventListener('click', startScan);
     urlInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
@@ -13,76 +14,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function startScan() {
+    // Função startScan MODIFICADA
+    async function startScan() { // Transformamos em 'async'
         const url = urlInput.value.trim();
         if (!url) {
             alert('Por favor, insira uma URL para verificar.');
             return;
         }
 
-        // 1. Limpa resultados anteriores e mostra o loading
+        // 1. Limpa e mostra o loading (igual ao seu)
         reportDiv.innerHTML = '';
         reportDiv.classList.add('hidden');
         resultsDiv.classList.remove('hidden');
         loadingDiv.classList.remove('hidden');
 
-        // 2. Simula um tempo de espera (2.5 segundos) para a "varredura"
-        setTimeout(() => {
-            // 3. Esconde o loading e mostra a área do relatório
+        // 2. SUBSTITUÍMOS o 'setTimeout' pela chamada real à API
+        try {
+            const response = await fetch('http://localhost:3000/scan', { // O endereço do nosso back-end
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url: url }), // Enviando a URL para o back-end
+            });
+
+            if (!response.ok) {
+                throw new Error('A resposta do servidor não foi OK.');
+            }
+
+            const data = await response.json(); // Pegando os dados reais
+
+            // 3. Esconde o loading e mostra o relatório
             loadingDiv.classList.add('hidden');
-            generateFakeReport(url);
+            
+            // 4. Usamos os dados reais (data) em vez dos falsos
+            generateRealReport(url, data); // Nova função
+            
             reportDiv.classList.remove('hidden');
-        }, 2500);
+
+        } catch (error) {
+            console.error('Erro ao conectar com o back-end:', error);
+            loadingDiv.classList.add('hidden');
+            reportDiv.innerHTML = `<p>Erro ao realizar a verificação. O servidor back-end está rodando?</p>`;
+            reportDiv.classList.remove('hidden');
+        }
     }
 
-    function generateFakeReport(url) {
-        // Dados "fake" para o relatório
-        const fakeDirectories = ['/admin/', '/backup/', '/.git/', '/config.old'];
-        const fakeOpenPorts = [
-            { port: 21, service: 'FTP', risk: 'Alto', riskClass: 'risk-high', info: 'Permite transferência de arquivos, muitas vezes de forma insegura.' },
-            { port: 22, service: 'SSH', risk: 'Médio', riskClass: 'risk-medium', info: 'Acesso remoto ao servidor. Requer senhas fortes e monitoramento.' },
-            { port: 3306, service: 'MySQL', risk: 'Alto', riskClass: 'risk-high', info: 'Banco de dados exposto publicamente. Acesso deve ser restrito.' }
-        ];
+    // Função que substitui a 'generateFakeReport'
+    function generateRealReport(url, data) {
+        // 'data.nmapResult' contém a saída do Nmap.
+        // Você precisará tratar essa string para exibi-la formatada.
+        // O Gobuster seria similar (data.gobusterResult).
 
-        // Monta o HTML do relatório
+        // Exemplo simples de exibição
         const reportHTML = `
             <h2>Relatório para: <span>${url}</span></h2>
             <br>
             
             <div class="report-card">
-                <h3><span class="status-icon">⚠️</span>Diretórios Expostos</h3>
-                <p>
-                    Uma varredura (simulando <strong>dirb/gobuster</strong>) encontrou diretórios com nomes comuns que podem expor informações sensíveis.
-                    É recomendado renomeá-los ou restringir o acesso.
-                </p>
-                <ul>
-                    ${fakeDirectories.map(dir => `<li>${dir}</li>`).join('')}
-                </ul>
+                <h3><span class="status-icon">🚨</span>Resultado do Nmap (Portas Abertas)</h3>
+                <pre>${data.nmapResult || 'Nenhum resultado.'}</pre>
             </div>
-
-            <div class="report-card">
-                <h3><span class="status-icon">🚨</span>Portas Abertas</h3>
-                <p>
-                    Uma verificação de portas (simulando <strong>nmap</strong>) identificou os seguintes serviços expostos à internet. Portas desnecessárias
-                    devem ser fechadas por um firewall.
-                </p>
-                <ul>
-                    ${fakeOpenPorts.map(port => `
-                        <li>
-                            <strong>Porta ${port.port} (${port.service})</strong> <span class="risk-tag ${port.riskClass}">${port.risk}</span>
-                            <br><small>${port.info}</small>
-                        </li>`).join('')}
-                </ul>
-            </div>
-
-            <div class="report-card">
-                <h3><span class="status-icon">❗️</span>Verificação de Senhas Comuns</h3>
-                <p>
-                    Nossa análise (simulando a lista <strong>rockyou.txt</strong>) sugere que algumas contas de usuário em sistemas conectados a este domínio
-                    podem estar utilizando senhas fracas e comumente vazadas. <strong>Recomende aos seus usuários que utilizem senhas fortes e únicas.</strong>
-                </p>
-            </div>
-        `;
+            
+            `;
 
         reportDiv.innerHTML = reportHTML;
     }
